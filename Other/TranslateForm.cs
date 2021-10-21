@@ -15,15 +15,9 @@ namespace HDF.Windows.Tools.Other
         {
             InitializeComponent();
             this.SetBorderShadows();
-            //记录位置大小
-            var file = Application.StartupPath + "\\location-翻译工具";
-            if (File.Exists(file))
-            {
-                var data = File.ReadAllText(file);
-                var location = data.Split(',').Select(s => Convert.ToInt32(s)).ToArray();
-                this.Location = new System.Drawing.Point(location[0], location[1]);
-            }
-            this.FormClosed += (sender, e) => File.WriteAllText(file, $"{this.Location.X},{this.Location.Y}");
+
+            this.SaveFormRectangle("location-翻译工具");
+
             //读取翻译API配置
             var path = Application.StartupPath + "\\config";
             if (File.Exists(path))
