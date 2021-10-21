@@ -25,8 +25,4 @@
 	  </None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Compile Update="Tools\TranslateTool.cs" />
-	</ItemGroup>
-
 </Project>
