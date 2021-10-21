@@ -22,7 +22,6 @@ namespace HDF.Windows.Tools
         [STAThread]
         static void Main()
         {
-
             new Mutex(true, "HDF.Windows.Tools", out bool setup);
             if (!setup)
                 Environment.Exit(1);

@@ -106,6 +106,7 @@
             this.Controls.Add(this.label1);
             this.Name = "HandleInfoForm";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "获取windows句柄";
             this.TopMost = true;
             this.ResumeLayout(false);

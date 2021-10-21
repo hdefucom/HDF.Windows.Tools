@@ -9,6 +9,13 @@ namespace HDF.Windows.Tools.Other
 {
     public partial class HandleInfoForm : Form
     {
+        public HandleInfoForm()
+        {
+            InitializeComponent();
+
+            this.SaveFormRectangle("location-句柄工具");
+        }
+
 
         private bool isMouseUp = false;
 
@@ -16,13 +23,6 @@ namespace HDF.Windows.Tools.Other
 
         private StringBuilder name = new StringBuilder(256);
 
-
-        public HandleInfoForm()
-        {
-            InitializeComponent();
-
-            this.SaveFormRectangle("location-句柄工具");
-        }
 
         private void btn_Get_MouseDown(object sender, MouseEventArgs e)
         {
@@ -42,7 +42,6 @@ namespace HDF.Windows.Tools.Other
                 return;
 
             var p = btn_Get.PointToScreen(e.Location);
-            //GetCursorPos(ref p);
             label1.Text = "坐标：X=" + p.X + "  |  Y=" + p.Y;
 
             //根据坐标获取句柄
@@ -65,8 +64,6 @@ namespace HDF.Windows.Tools.Other
         {
             SendMessage(hwnd, 12, 0, textBox1.Text);
         }
-
-
 
 
 
