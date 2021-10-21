@@ -25,18 +25,20 @@ namespace HDF.Windows.Tools
         public void Run()
         {
             form ??= new HandleInfoForm();
+            if (form.Disposing || form.IsDisposed)
+                form = new HandleInfoForm();
             form.Visible = true;
             form.Activate();
         }
         public void Load()
         {
-            form ??= new HandleInfoForm();
+            //form ??= new HandleInfoForm();
         }
 
         public void Unload()
         {
-            form.Close();
-            form.Dispose();
+            form?.Close();
+            form?.Dispose();
         }
 
         public bool HandlerHotKey(HotKeys hotkey) => hotkey switch
@@ -55,6 +57,10 @@ namespace HDF.Windows.Tools
 
         private bool ShowOrHide()
         {
+            form ??= new HandleInfoForm();
+            if (form.Disposing || form.IsDisposed)
+                form = new HandleInfoForm();
+
             form.Visible = !form.Visible;
             if (form.Visible)
                 form.Activate();

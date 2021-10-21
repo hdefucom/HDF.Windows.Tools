@@ -1,6 +1,5 @@
+using HDF.Windows.Tools.Common;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,7 +9,6 @@ namespace HDF.Windows.Tools.Other
 {
     public partial class HandleInfoForm : Form
     {
-
 
         private bool isMouseUp = false;
 
@@ -22,6 +20,8 @@ namespace HDF.Windows.Tools.Other
         public HandleInfoForm()
         {
             InitializeComponent();
+
+            this.SaveFormRectangle("location-句柄工具");
         }
 
         private void btn_Get_MouseDown(object sender, MouseEventArgs e)
@@ -42,10 +42,14 @@ namespace HDF.Windows.Tools.Other
                 return;
 
             var p = btn_Get.PointToScreen(e.Location);
+            //GetCursorPos(ref p);
             label1.Text = "坐标：X=" + p.X + "  |  Y=" + p.Y;
 
             //根据坐标获取句柄
-            hwnd = WindowFromPoint(p.X, p.Y);
+            if (IntPtr.Size == 4)
+                hwnd = WindowFromPoint(p.X, p.Y);
+            else if (IntPtr.Size == 8)
+                hwnd = WindowFromPoint(p);
             label2.Text = "句柄：" + hwnd;
 
             //获取标题名
@@ -68,9 +72,21 @@ namespace HDF.Windows.Tools.Other
 
         #region
 
-
+        /// <summary>
+        /// X86使用
+        /// </summary>
+        /// <param name="xPoint"></param>
+        /// <param name="yPoint"></param>
+        /// <returns></returns>
         [DllImport("user32.dll")]
         private static extern int WindowFromPoint(int xPoint, int yPoint);
+        /// <summary>
+        /// X64使用
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        private static extern int WindowFromPoint(Point point);
 
         [DllImport("user32.dll")]
         private static extern int GetWindowText(int hwnd, StringBuilder lpString, int nMaxCount);
@@ -80,7 +96,6 @@ namespace HDF.Windows.Tools.Other
 
         [DllImport("user32.dll", EntryPoint = "SendMessageA")]
         private static extern int SendMessage(int hwnd, int wMsg, int wParam, string lParam);
-
         #endregion
 
     }
