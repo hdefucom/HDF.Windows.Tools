@@ -1,6 +1,7 @@
 using HDF.Windows.Tools.Common;
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -51,6 +52,11 @@ namespace HDF.Windows.Tools.Other
                 hwnd = WindowFromPoint(p);
             label2.Text = "句柄：" + hwnd;
 
+            var c = Form.FromChildHandle(new IntPtr(hwnd));
+            lbl_CSharpClassName.Text = "C#类名：" + c?.GetType().FullName;
+            lbl_CSharpName.Text = "C#Name：" + c?.Name;
+
+
             //获取标题名
             GetWindowText(hwnd, name, 256);
             label3.Text = "标题：" + name.ToString();
@@ -58,6 +64,8 @@ namespace HDF.Windows.Tools.Other
             //获取类名
             GetClassName(hwnd, name, 256);
             label4.Text = "名称：" + name.ToString();
+
+
         }
 
         private void btn_UpdataTitle_Click(object sender, EventArgs e)
