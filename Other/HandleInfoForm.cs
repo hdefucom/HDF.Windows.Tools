@@ -1,5 +1,7 @@
 using HDF.Windows.Tools.Common;
 using System;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -56,7 +58,6 @@ namespace HDF.Windows.Tools.Other
             lbl_CSharpClassName.Text = "C#类名：" + c?.GetType().FullName;
             lbl_CSharpName.Text = "C#Name：" + c?.Name;
 
-
             //获取标题名
             GetWindowText(hwnd, name, 256);
             label3.Text = "标题：" + name.ToString();
@@ -65,15 +66,12 @@ namespace HDF.Windows.Tools.Other
             GetClassName(hwnd, name, 256);
             label4.Text = "名称：" + name.ToString();
 
-
         }
 
         private void btn_UpdataTitle_Click(object sender, EventArgs e)
         {
             SendMessage(hwnd, 12, 0, textBox1.Text);
         }
-
-
 
         #region
 
@@ -96,7 +94,7 @@ namespace HDF.Windows.Tools.Other
         [DllImport("user32.dll")]
         private static extern int GetWindowText(int hwnd, StringBuilder lpString, int nMaxCount);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int GetClassName(int hwnd, StringBuilder lpstring, int nMaxCount);
 
         [DllImport("user32.dll", EntryPoint = "SendMessageA")]
