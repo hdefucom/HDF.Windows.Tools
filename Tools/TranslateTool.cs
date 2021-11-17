@@ -16,7 +16,7 @@ namespace HDF.Windows.Tools
         public bool EnableHotKey => true;
 
         private readonly HotKeys[] hotkeys = new HotKeys[] {
-            new HotKeys(Keys.W, ModifierKeys.Control),
+            new HotKeys(Keys.H, ModifierKeys.Control),
             new HotKeys(Keys.Q, ModifierKeys.Control),
             new HotKeys(Keys.B, ModifierKeys.Control),
             new HotKeys(Keys.G, ModifierKeys.Control),
@@ -47,7 +47,7 @@ namespace HDF.Windows.Tools
 
         public bool HandlerHotKey(HotKeys hotkey) => hotkey switch
         {
-            (Keys.W, ModifierKeys.Control) => ShowOrHide(),
+            (Keys.H, ModifierKeys.Control) => ShowOrHide(),
             (Keys.Q, ModifierKeys.Control) => Input(),
             (Keys.B, ModifierKeys.Control) => Search(true),
             (Keys.G, ModifierKeys.Control) => Search(false),
