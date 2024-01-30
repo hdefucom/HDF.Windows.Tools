@@ -91,7 +91,7 @@ namespace HDF.Windows.Tools
             if (type)
                 Process.Start("https://www.baidu.com/s?ie=UTF-8&wd=" + text);
             else
-                Process.Start("http://google.com/search?q=" + text);
+                Process.Start("https://google.com/search?q=" + text);
 
             return true;
         }
