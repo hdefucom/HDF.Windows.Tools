@@ -2,9 +2,10 @@
 using HDF.Common.Windows;
 using HDF.Windows.Tools.Common;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HDF.Windows.Tools.Other
@@ -18,6 +19,11 @@ namespace HDF.Windows.Tools.Other
 
             this.SaveFormRectangle("location-翻译工具");
 
+
+            taskbar = new TaskbarTranslateForm();
+            if (File.Exists(Application.StartupPath + "\\enable-taskbar-tool"))
+                taskbar.Show();
+
             //读取翻译API配置
             var path = Application.StartupPath + "\\config";
             if (File.Exists(path))
@@ -26,6 +32,7 @@ namespace HDF.Windows.Tools.Other
                 if ((config?.Length ?? 0) < 2)
                 {
                     txt_Key.Text = "程序配置错误";
+                    taskbar.SetTextBox("程序配置错误");
                     return;
                 }
                 TranslateExtensions.BaiduAppId = config[0];
@@ -34,9 +41,22 @@ namespace HDF.Windows.Tools.Other
             else
             {
                 txt_Key.Text = "请先配置API接口信息";
+                taskbar.SetTextBox("请先配置API接口信息");
                 return;
             }
+
+
+
         }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            taskbar?.Close();
+        }
+
+        private TaskbarTranslateForm taskbar;
 
 
         private int lastTickCount;//防止api调用过快，
@@ -67,19 +87,43 @@ namespace HDF.Windows.Tools.Other
                     text = text.Substring(0, 1000);
                 try
                 {
-                    var resstring = TranslateExtensions.BaiduTranslate(text);
-                    var res = Newtonsoft.Json.JsonConvert.DeserializeObject<TranslateExtensions.BaiduTranslateApiResult>(resstring);
-                    if (res != null && res.error_code == null)
+                    new Task(() =>
                     {
-                        var str = string.Join(Environment.NewLine, res.trans_result.Select(r => r.dst));
-                        txt_Key.Text = text;
-                        txt_Target.Text = str;
-                    }
+                        var resstring = TranslateExtensions.BaiduTranslate(text);
+                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<TranslateExtensions.BaiduTranslateApiResult>(resstring);
+
+
+                        var str = "";
+
+                        if (res == null)
+                        {
+                            text = "请求返回序列化：null";
+                            str = "请求返回序列化：null";
+                        }
+                        else if (res.error_code != null)
+                        {
+                            text = "请求返回error_code：" + res.error_code;
+                            str = "请求返回error_code：" + res.error_code;
+                        }
+                        else
+                            str = string.Join(Environment.NewLine, res.trans_result.Select(r => r.dst));
+
+
+                        this.Invoke(() =>
+                        {
+                            txt_Key.Text = text;
+                            txt_Target.Text = str;
+                            taskbar.SetTextBox(str);
+                        });
+
+
+                    }).Start();
                 }
                 catch (Exception ex)
                 {
                     txt_Key.Text = "又出Bug了！~(￣▽￣)~*";
                     txt_Target.Text = ex.ToString();
+                    taskbar.SetTextBox("又出Bug了！~(￣▽￣)~*");
                 }
             }
         }

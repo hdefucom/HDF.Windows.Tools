@@ -43,6 +43,8 @@ namespace HDF.Windows.Tools
         {
             var res = RemoveClipboardFormatListener(handle);
             Log.Write($"卸载【{this.Name}】--> 添加剪切板监听：{res}");
+
+            form.Close();
         }
 
         public bool HandlerHotKey(HotKeys hotkey) => hotkey switch
