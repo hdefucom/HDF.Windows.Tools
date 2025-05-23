@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -42,6 +43,8 @@ namespace HDF.Windows.Tools
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
 
+        Font bigfont = new Font("宋体", 24F, FontStyle.Regular, GraphicsUnit.Point, 134);
+        Font smallfont = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
 
 
 
@@ -49,6 +52,13 @@ namespace HDF.Windows.Tools
         {
             try
             {
+                if (msg != null && msg.Length <= 10)
+                    this.textBox1.Font = bigfont;
+                else
+                    this.textBox1.Font = smallfont;
+
+
+
                 textBox1.Text = msg;
             }
             catch (Exception ex)
